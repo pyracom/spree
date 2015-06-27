@@ -11,7 +11,17 @@ module Spree
 
     def show
       @order = Order.find_by_number!(params[:id])
+      if @order
+        if @order.user
+          if @order.user == spree_current_user
+            @order
+          else
+            redirect_to root_path
+          end
+        end
+      end
     end
+
 
     def update
       if @order.contents.update_cart(order_params)
